@@ -1,21 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Collections.ObjectModel;
+﻿using System.Windows;
 using MyContacts.Modules;
-using System.ComponentModel;
 using System.Collections.Specialized;
+using System;
 
 namespace MyContacts
 {
@@ -24,7 +10,7 @@ namespace MyContacts
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Contact> contacts;
+        private ObservableCollectionModifed<Contact> contacts;
 
         private JsonIOservice jsonIO = new JsonIOservice();
         public MainWindow()
@@ -45,18 +31,35 @@ namespace MyContacts
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            contacts = jsonIO.LoadContacts();
-            contacts.CollectionChanged += Wait_Change;
+            try
+            {
+                contacts = jsonIO.LoadContacts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Close();
+            }
+            contacts.CollectionChanged += Collection_Changed;
+  
             if (contacts.Count <= 0)
             {
-                AddContactRange(CreateRandomContacts.GetContacts(45));
+                AddContactRange(CreateRandomContacts.GetContacts(new Random().Next(1, 100)));
             }
             DataGridInfo.ItemsSource = contacts;
         }
 
-        private void Wait_Change(object sender, NotifyCollectionChangedEventArgs e)
+        private void Collection_Changed(object sender, NotifyCollectionChangedEventArgs e)
         {
-            jsonIO.WriteToJsonFile(contacts);
+            try
+            {
+                jsonIO.WriteToJsonFile(contacts);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Close();
+            }
         }
     }
 }

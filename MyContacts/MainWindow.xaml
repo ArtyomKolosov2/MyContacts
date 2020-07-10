@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyContacts"
         mc:Ignorable="d"
-        Title="TestingDataBindings" Height="auto" Width="auto" Loaded="Window_Loaded">
+        Title="TestingDataBindings" Height="500" Width="500" Loaded="Window_Loaded">
     <Window.Resources>
         <Style x:Key="MainStyle">
-            <Setter Property="Control.FontFamily" Value="Verdana" />
+            <Setter Property="Control.FontFamily" Value="Arial" />
             <Setter Property="Control.FontSize" Value="20"/>
             <Setter Property="Control.Background" Value="White" />
             <Setter Property="Control.Foreground" Value="Black" />
             <Setter Property="Control.Margin" Value="10" />
             <Setter Property="Control.BorderBrush" Value="Green"/>
-            <Setter Property="Control.BorderThickness" Value="10"/>
+            <Setter Property="Control.BorderThickness" Value="8"/>
         </Style>
     </Window.Resources>
     <Grid>
