@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace MyContacts.Modules
 {
@@ -8,7 +9,8 @@ namespace MyContacts.Modules
     {
         private JsonSerializer serializer = new JsonSerializer();
         public string JsonPath { get; set; } = Directory.GetCurrentDirectory() + "/ContactsInfo.json";
-        public void WriteToJsonFile(ObservableCollection<Contact> contacts)
+
+        public void WriteToJsonFile(object contacts)
         {
             using (StreamWriter writer = File.CreateText(JsonPath))
             {
@@ -16,17 +18,17 @@ namespace MyContacts.Modules
             }
         }
 
-        public ObservableCollection<Contact> LoadContacts()
+        public BindingList<Contact> LoadContacts()
         {
             var IsExist = File.Exists(JsonPath);
-            ObservableCollection<Contact> readContacts = new ObservableCollection<Contact>();
+            BindingList<Contact> readContacts = new BindingList<Contact>();
             if (IsExist)
             {
                 using (StreamReader reader = File.OpenText(JsonPath))
                 {
                     JsonSerializer serializer = new JsonSerializer();
 
-                    readContacts = (ObservableCollection<Contact>)serializer.Deserialize(reader, readContacts.GetType());
+                    readContacts = (BindingList<Contact>)serializer.Deserialize(reader, readContacts.GetType());
                 }
             }
             return readContacts;

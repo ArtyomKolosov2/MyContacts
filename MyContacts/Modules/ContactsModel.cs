@@ -87,6 +87,9 @@ namespace MyContacts.Modules
     }
     public class Contact
     {
+
+        public delegate void Handler();
+        public static event Handler DataChanged;
         private string name = null;
         private string surName = null;
         private string phoneNumber = null;
@@ -101,6 +104,7 @@ namespace MyContacts.Modules
             set
             {
                 name = value;
+                DataChanged?.Invoke();
             }
         }
 
@@ -113,6 +117,7 @@ namespace MyContacts.Modules
             set
             {
                 surName = value;
+                DataChanged?.Invoke();
             }
         }
 
@@ -125,6 +130,7 @@ namespace MyContacts.Modules
             set
             {
                 phoneNumber = value;
+                DataChanged?.Invoke();
             }
         }
     }

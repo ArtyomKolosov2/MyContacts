@@ -24,7 +24,7 @@ namespace MyContacts
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ObservableCollection<Contact> contacts;
+        private BindingList<Contact> contacts;
 
         private JsonIOservice jsonIO = new JsonIOservice();
         public MainWindow()
@@ -45,8 +45,17 @@ namespace MyContacts
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            contacts = jsonIO.LoadContacts();
-            contacts.CollectionChanged += Wait_Change;
+            try
+            {
+                contacts = jsonIO.LoadContacts();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Close();
+            }
+            contacts.ListChanged += Wait_Change;
+            Contact.DataChanged += Contact_Changed;
             if (contacts.Count <= 0)
             {
                 AddContactRange(CreateRandomContacts.GetContacts(45));
@@ -54,7 +63,13 @@ namespace MyContacts
             DataGridInfo.ItemsSource = contacts;
         }
 
-        private void Wait_Change(object sender, NotifyCollectionChangedEventArgs e)
+        private void Wait_Change(object sender, ListChangedEventArgs e)
+        {
+            ListChangedType type = e.ListChangedType;
+            jsonIO.WriteToJsonFile(sender);
+        }
+
+        private void Contact_Changed()
         {
             jsonIO.WriteToJsonFile(contacts);
         }
