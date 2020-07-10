@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace MyContacts.Modules
 {
@@ -85,13 +83,17 @@ namespace MyContacts.Modules
             return newContacts;
         }
     }
-    public class Contact
+    public class Contact : INotifyPropertyChanged
     {
         private string name = null;
         private string surName = null;
         private string phoneNumber = null;
 
-        
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void ContactChanged([CallerMemberName]string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
         public string Name
         {
             get
@@ -101,6 +103,7 @@ namespace MyContacts.Modules
             set
             {
                 name = value;
+                ContactChanged("Name");
             }
         }
 
@@ -113,6 +116,7 @@ namespace MyContacts.Modules
             set
             {
                 surName = value;
+                ContactChanged("SurName");
             }
         }
 
@@ -125,6 +129,7 @@ namespace MyContacts.Modules
             set
             {
                 phoneNumber = value;
+                ContactChanged("PhoneNumber");
             }
         }
     }
